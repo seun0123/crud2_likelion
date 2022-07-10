@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+
+{% block content %}
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+            <!-- About-->
+            <section class="resume-section" id="about">
+                <div class="resume-section-content">
+                    <h2>Read</h2>
+                    {% for blogs in blogs.all %}
+                    <h3><a href="{% url 'detail' blogs.id %}">제목 : {{blogs.title}}</a></h3>
+                    <p>작성자 : {{blogs.writer}}</p>
+                    <p>작성일 : {{blogs.pub_date}}</p><hr>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endblock %}
+            <hr class="m-0" />
