@@ -8,24 +8,26 @@ def main(request):
     return render(request, 'main.html')
 
 def write(request):
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.pub_date = timezone.now()
-            form.save()
-            return redirect('read')
-    else:
-        form = BlogForm
-        return render(request, 'write.html', {'form':form})
+        return render(request, 'write.html')
+
+def create(request):
+    post=Blog()
+    post.title = request.POST['title']
+    post.pub_date = timezone.now()
+    post.writer = request.POST['writer']
+    post.body = request.POST['body']
+    post.feelings = request.POST['feelings']
+    post.image = request.FILES.get('image')
+    post.save()
+    return redirect('read')
 
 def read(request):
-    blogs = Blog.objects
-    return render(request, 'read.html', {'blogs':blogs})
+    posts = Blog.objects
+    return render(request, 'read.html', {'posts':posts})
 
 def detail(request, id):
-    blog = get_object_or_404(Blog, id=id)
-    return render(request, 'read.html', {'blog': blog})
+    post = get_object_or_404(Blog, id = id)
+    return render(request, 'detail.html', {'post': post})
 
 def edit(request, id):
     edit_post = Blog.objects.get(id=id)
@@ -36,7 +38,9 @@ def update(request, id):
     update_post.title = request.POST['title']
     update_post.pub_date = timezone.now()
     update_post.writer = request.POST['writer']
+    update_post.feelings = request.POST['feelings']
     update_post.body = request.POST['body']
+    update_post.image = request.FILES.get('image')
     update_post.save()
     return redirect('detail', id)
 
